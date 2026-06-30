@@ -1,0 +1,59 @@
+name: Check for fnox updates
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Specific fnox version to update to, with or without leading v"
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update package
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TARGET_VERSION: ${{ inputs.version }}
+        run: |
+          if [ -n "$TARGET_VERSION" ]; then
+            ./scripts/update.sh --version "$TARGET_VERSION"
+          else
+            ./scripts/update.sh
+          fi
+
+      - name: Read package version
+        id: package
+        run: |
+          version="$(sed -n 's/.*version = "\([^"]*\)";.*/\1/p' package.nix | head -n1)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update fnox to ${{ steps.package.outputs.version }}"
+          title: "chore: update fnox to ${{ steps.package.outputs.version }}"
+          body: |
+            Updates fnox to `${{ steps.package.outputs.version }}`.
+
+            The update workflow refreshed the package version and release asset hashes, then built the current Linux package.
+          branch: update-fnox-${{ steps.package.outputs.version }}
+          delete-branch: true
+          labels: |
+            dependencies
+            automated
