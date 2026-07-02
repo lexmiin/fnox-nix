@@ -9,25 +9,25 @@
   releases = {
     aarch64-darwin = {
       target = "aarch64-apple-darwin";
-      hash = "sha256-ts1RcUfGuJeX2tmWV3biA/wH9/wnn1x0hvenm3j+/2E=";
+      hash = "sha256-cdxnxUZw1BwjlmnSzb6ni267vGwXS+yndDuTMwZh4Ho=";
     };
     x86_64-darwin = {
       target = "x86_64-apple-darwin";
-      hash = "sha256-79+LKF5S8oNFaBic3P07Sg2UNX1hstTlyvhFCivEamc=";
+      hash = "sha256-nLLgRWRGnA8B2KWRw/LEo4d8R2nSnlDRAhYJCUfg4a4=";
     };
     aarch64-linux = {
       target = "aarch64-unknown-linux-musl";
-      hash = "sha256-+etNPXpVeb6+GQ0L2IUxn2O3UK+bbol2BxEARcqlsak=";
+      hash = "sha256-wJAKfsnVc6qgNXS1Z+XtntdfYwc6e5nDV/489oa4U9M=";
     };
     x86_64-linux = {
       target = "x86_64-unknown-linux-musl";
-      hash = "sha256-ms4H3mcDUHpgbZv3//pYQc08+GkzsVhS5uAJo0q31aA=";
+      hash = "sha256-EwPcK5G9mm2M7/DfYBYJ8IBIU4S0YlEe9cZL/sddnxU=";
     };
   };
 in
   stdenvNoCC.mkDerivation rec {
     pname = "fnox";
-    version = "1.28.0";
+    version = "1.29.0";
 
     src = let
       system = stdenvNoCC.hostPlatform.system;
