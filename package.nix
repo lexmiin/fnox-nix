@@ -3,31 +3,29 @@
   stdenvNoCC,
   fetchurl,
   installShellFiles,
-  makeWrapper,
-  usage,
 }: let
   releases = {
     aarch64-darwin = {
       target = "aarch64-apple-darwin";
-      hash = "sha256-gKMAKEHmmqC+h4IOSdJXdqXD75bCKUKu4o+RC/irpfY=";
+      hash = "sha256-YMroZwUQi3otKVC3GC1YqnF/aZbkux4x/B6CGaE6DMU=";
     };
     x86_64-darwin = {
       target = "x86_64-apple-darwin";
-      hash = "sha256-Hm9A+vHMCqhAahMd51Wsn62Nh8jM6nvLybi/2thh7V8=";
+      hash = "sha256-VsC9fINm9uz5b2xCXMqBulb7ZOFnmL2+3xoGddKH2Gg=";
     };
     aarch64-linux = {
       target = "aarch64-unknown-linux-musl";
-      hash = "sha256-Svo1R1Gkl3xWRIXB7sjyApZekFXIPwOuQDVr+vn0ZX4=";
+      hash = "sha256-nzve87YYoR0SPeRlUZHjGctKAmkQGWCa7dy4YuBdJ70=";
     };
     x86_64-linux = {
       target = "x86_64-unknown-linux-musl";
-      hash = "sha256-1JVkQsAPvcMUt0Y8q70NHGVt6UNji6E9WkhtIoO+Uh4=";
+      hash = "sha256-NkjkFakQROy71iYEnH14H2UglfSThcuPvLjrpfOclDQ=";
     };
   };
 in
   stdenvNoCC.mkDerivation rec {
     pname = "fnox";
-    version = "1.33.1";
+    version = "1.34.0";
 
     src = let
       system = stdenvNoCC.hostPlatform.system;
@@ -40,10 +38,7 @@ in
         inherit (release) hash;
       };
 
-    nativeBuildInputs = [
-      installShellFiles
-      makeWrapper
-    ];
+    nativeBuildInputs = [installShellFiles];
 
     sourceRoot = ".";
 
@@ -51,16 +46,10 @@ in
       runHook preInstall
 
       install -Dm755 fnox $out/bin/fnox
-      wrapProgram $out/bin/fnox \
-        --prefix PATH : "${lib.makeBinPath [usage]}"
 
       $out/bin/fnox completion bash > fnox.bash
       $out/bin/fnox completion fish > fnox.fish
       $out/bin/fnox completion zsh > _fnox
-
-      substituteInPlace fnox.bash fnox.fish _fnox \
-        --replace-fail '-p usage' '-p ${lib.getExe usage}' \
-        --replace-fail 'usage complete-word' '${lib.getExe usage} complete-word'
 
       installShellCompletion --cmd fnox \
         --bash fnox.bash \
