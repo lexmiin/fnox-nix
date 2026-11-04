@@ -7,25 +7,25 @@
   releases = {
     aarch64-darwin = {
       target = "aarch64-apple-darwin";
-      hash = "sha256-2dDETHpZfRdF9vQLmH0lZ6wyabSq1ERUOiRUfTZZsQU=";
+      hash = "sha256-4a/FkRb+m/7mRfPg0DU7D3/2jOSna8bFFtp67dmkcXk=";
     };
     x86_64-darwin = {
       target = "x86_64-apple-darwin";
-      hash = "sha256-FEG19eoL9xQpEwLfhF3zdAs1aSdPxNYwA/7vcUFYECg=";
+      hash = "sha256-BBJYmv30bf5vobdYe3uFDkX79HJBcWi6sJ3DAPrA1wE=";
     };
     aarch64-linux = {
       target = "aarch64-unknown-linux-musl";
-      hash = "sha256-4WX/knjKKXZeG1uiiIm8rvD261ty2ptEV73nl2a2R9U=";
+      hash = "sha256-MQ75A0ZIF3cII/nE0xicD5RX7BxXRjRRBZ7v0xBG3pc=";
     };
     x86_64-linux = {
       target = "x86_64-unknown-linux-musl";
-      hash = "sha256-qa1aBMuLUs9CTbhx4TakLxrBeuuS5MV99iNHmbktsnY=";
+      hash = "sha256-03H8yJP0q8Zg/48Qtcb+NnRdgbpq4JTCLI/k29rxfk8=";
     };
   };
 in
   stdenvNoCC.mkDerivation rec {
     pname = "fnox";
-    version = "1.46.0";
+    version = "1.47.0";
 
     src = let
       system = stdenvNoCC.hostPlatform.system;
